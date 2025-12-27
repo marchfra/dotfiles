@@ -3,9 +3,8 @@
 These are my dotfiles. To install them, do
 
 ```shell
-cd ~
-git clone https://github.com/marchfra/dotfiles.git
-cd dotfiles
+git clone https://github.com/marchfra/dotfiles.git ~/dotfiles
+cd ~/dotfiles
 ```
 
 then run
