@@ -1,0 +1,105 @@
+# +--------+
+# | system |
+# +--------+
+
+alias bigf="find / -xdev -type f -size +500M"  # find files bigger than 500M
+
+# +-----+
+# | zsh |
+# +-----+
+
+alias d="dirs -v"  # print 10 most recent directories
+for index ({1..9}) alias "$index"="cd +${index} > /dev/null"; unset index    # directory stack
+
+# +----+
+# | ls |
+# +----+
+
+alias ls=colorls              # Use colorls instead of ls (nicer formatting and icons)
+alias l="ls -l"               # List files in the long format
+alias ll="ls -lahF"           # List all files in the long format, with size units
+                              # suffixes and file markings
+alias lls="ls -lahFtr"        # Same as above, with entries sorted from oldest to newest by
+                              # time modified
+alias lc="ls -CF"             # List all files with markings in multicolumn format
+# alias la="ls -A"              # List all files
+alias la="ls -alh"            # List all files in long format with size units suffixes
+
+# +----+
+# | cp |
+# +----+
+
+alias cp="cp -iv"  # Ask for confirmation and verbose output
+alias mv="mv -iv"
+alias rm="rm -Iv"  # Slightly less intrusive confirmation
+
+# +--------+
+# | Neovim |
+# +--------+
+
+alias vim="nvim"
+alias vi="nvim"
+
+# +------+
+# | Tmux |
+# +------+
+
+alias mux="tmuxinator"
+
+# +-----+
+# | Git |
+# +-----+
+
+alias gs="git status"
+alias gss="git status -s"    # Give the output in short format
+alias ga="git add"
+alias gaa="git add --all"    # Stage all changes
+alias gp="git push"          # Push commits to remote branch
+alias gpo="git pull origin"  # Pull commits from remote branch
+alias gb="git branch "
+alias gc="git commit"
+alias gcm="git commit -m "
+alias gcf="git commit -F -"
+alias gd="git diff"
+alias gco="git checkout "
+alias gclean="git branch --merged | grep  -v '\\*\\|master\\|develop' | xargs -n 1 git branch -d"  # Delete local branch merged with master
+
+# +----+
+# | uv |
+# +----+
+
+alias uvclean="~/.scripts/uv-clean.sh ~ 90"
+
+# +------+
+# | lynx |
+# +------+
+
+alias lynx="lynx -vikeys --accept_all_cookies"
+
+# +--------+
+# | iTerm2 |
+# +--------+
+alias reset_size="printf '\e[8;25;88t'"  # Reset window size to 25 lines and 88 rows
+
+# +----------+
+# | personal |
+# +----------+
+
+alias doc="$HOME/Documents"
+alias dow="$HOME/Downloads"
+alias aliases="cat $XDG_CONFIG_HOME/aliases/aliases"
+
+# University
+alias uni="cd $HOME/Documents/Uni"
+alias algo="cd $HOME/Documents/Uni/Magistrale/Algoritmi"
+alias deep="cd $HOME/Documents/Uni/Magistrale/DeepLearning"
+alias mfnet="cd $HOME/Documents/Uni/Magistrale/DeepLearning/final_project/mfnet"
+alias mst="cd $HOME/Documents/Uni/MasterThesis"
+alias lcblm="tmuxinator start lcblm"
+
+# Music
+alias scores="cd $HOME/Music/Scores/"
+alias toliman="cd $HOME/Music/Toliman"
+alias mscore4="/Applications/MuseScore\ 4.app/Contents/MacOS/mscore"
+alias reaper="/Applications/REAPER.app/Contents/MacOS/REAPER"
+alias reap="cd $HOME/Music/REAPER"

@@ -1,0 +1,69 @@
+{
+    "Google Docstring (Full)": {
+        "prefix": "docfull",
+        "body": [
+            "\"\"\"${1:Summary}.",
+            "",
+            "Args:",
+            "    ${2:param1}: ${3:Description}.",
+            "    ${4:param2}: ${5:Description}.",
+            "",
+            "Returns:",
+            "    ${6:Description}.",
+            "",
+            "Raises:",
+            "    ${7:ExceptionType}: ${8:Description}.",
+            "",
+            "\"\"\""
+        ],
+        "description": "Google-style docstring (Args, Returns, Raises)"
+    },
+    "Google Docstring (Args + Returns)": {
+        "prefix": "docret",
+        "body": [
+            "\"\"\"${1:Summary}.",
+            "",
+            "Args:",
+            "    ${2:param1}: ${3:Description}.",
+            "    ${4:param2}: ${5:Description}.",
+            "",
+            "Returns:",
+            "    ${6:Description}.",
+            "",
+            "\"\"\""
+        ],
+        "description": "Google-style docstring (Args + Returns only)"
+    },
+    "Google Docstring (Summary + Args)": {
+        "prefix": "docargs",
+        "body": [
+            "\"\"\"${1:Summary}.",
+            "",
+            "Args:",
+            "    ${2:param1}: ${3:Description}.",
+            "    ${4:param2}: ${5:Description}.",
+            "",
+            "\"\"\""
+        ],
+        "description": "Google-style docstring (Summary + Args only)"
+    },
+    "Google Docstring (Summary Only)": {
+        "prefix": "docsum",
+        "body": [
+            "\"\"\"${1:Summary}.\"\"\""
+        ],
+        "description": "Google-style docstring (Summary only)"
+    },
+    "Boilerplate main function": {
+        "prefix": "defmain",
+        "body": [
+            "def main() -> None:",
+            "    ${1:pass}",
+            "",
+            "",
+            "if __name__ == \"__main__\":",
+            "    main()"
+        ],
+        "description": "Boilerplate main function"
+    }
+}

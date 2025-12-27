@@ -1,0 +1,342 @@
+# : << 'EOF'
+# Oh my tmux!
+# 💛🩷💙🖤❤️🤍
+# https://github.com/gpakosz/.tmux
+# (‑●‑●)> dual licensed under the WTFPL v2 license and the MIT license,
+#         without any warranty.
+#         Copyright 2012— Gregory Pakosz (@gpakosz).
+
+
+# -- bindings ------------------------------------------------------------------
+
+# preserve tmux stock bindings,
+# while adding bindings that don't conflict with these stock bindings
+# /!\ this disables some of Oh my tmux! bindings described in README.md
+#   - true
+#   - false (default)
+tmux_conf_preserve_stock_bindings=false
+
+
+# -- session creation ----------------------------------------------------------
+
+# prompt for session name when creating a new session, possible values are:
+#   - true
+#   - false (default)
+#   - disabled (do not modify new-session bindings)
+tmux_conf_new_session_prompt=true
+
+# new session retains current path, possible values are:
+#   - true
+#   - false (default)
+#   - disabled (do not modify new-session bindings)
+tmux_conf_new_session_retain_current_path=false
+
+
+# -- windows & pane creation ---------------------------------------------------
+
+# new window retains current path, possible values are:
+#   - true
+#   - false (default)
+#   - disabled (do not modify new-window bindings)
+tmux_conf_new_window_retain_current_path=true
+
+# new window tries to reconnect ssh sessions, possible values are:
+#   - true
+#   - false (default)
+#   - disabled (do not modify new-window bindings)
+tmux_conf_new_window_reconnect_ssh=false
+
+# new pane retains current path, possible values are:
+#   - true (default)
+#   - false
+#   - disabled (do not modify split-window bindings)
+tmux_conf_new_pane_retain_current_path=true
+
+# new pane tries to reconnect ssh sessions, possible values are:
+#   - true
+#   - false (default)
+#   - disabled (do not modify split-window bindings)
+tmux_conf_new_pane_reconnect_ssh=false
+
+
+# -- display -------------------------------------------------------------------
+
+# RGB 24-bit colour support, possible values are:
+#   - true
+#   - false
+#   - auto (default)
+#
+# automatic detection relies on the COLORTERM environment variable being defined
+# to 'truecolor' or '24bit' or '$ tput colors' answering '16777216'
+# see https://github.com/termstandard/colors
+tmux_conf_24b_colour=auto
+
+
+# -- theming -------------------------------------------------------------------
+
+# enable or disable theming:
+#   - enabled (default)
+#   - disabled
+# when disabled, all tmux_conf_theme_xxx variables are ignored except:
+#   - tmux_conf_theme_pairing
+#   - tmux_conf_theme_prefix
+#   - tmux_conf_theme_mouse
+#   - tmux_conf_theme_root
+#   - tmux_conf_theme_synchronized
+tmux_conf_theme=disabled
+
+# pairing indicator
+tmux_conf_theme_pairing="⚇"                 # U+2687
+tmux_conf_theme_pairing_fg="none"
+tmux_conf_theme_pairing_bg="none"
+tmux_conf_theme_pairing_attr="none"
+
+# prefix indicator
+tmux_conf_theme_prefix="⌨"                  # U+2328
+tmux_conf_theme_prefix_fg="none"
+tmux_conf_theme_prefix_bg="none"
+tmux_conf_theme_prefix_attr="none"
+
+# mouse indicator
+tmux_conf_theme_mouse="↗"                   # U+2197
+tmux_conf_theme_mouse_fg="none"
+tmux_conf_theme_mouse_bg="none"
+tmux_conf_theme_mouse_attr="none"
+
+# root indicator
+tmux_conf_theme_root="!"
+tmux_conf_theme_root_fg="none"
+tmux_conf_theme_root_bg="none"
+tmux_conf_theme_root_attr="bold,blink"
+
+# synchronized indicator
+tmux_conf_theme_synchronized="⚏"            # U+268F
+tmux_conf_theme_synchronized_fg="none"
+tmux_conf_theme_synchronized_bg="none"
+tmux_conf_theme_synchronized_attr="none"
+
+
+# -- clipboard -----------------------------------------------------------------
+
+# in copy mode, copying selection also copies to the OS clipboard
+#   - true
+#   - false (default)
+#   - disabled
+# on Linux, this requires xsel, xclip or wl-copy
+tmux_conf_copy_to_os_clipboard=true
+
+
+# -- urlscan -------------------------------------------------------------------
+
+# options passed to urlscan
+tmux_conf_urlscan_options="--compact --dedupe"
+
+
+# -- user customizations -------------------------------------------------------
+
+# this is the place to override or undo settings
+
+# set new prefix2
+set -g prefix2 C-s
+unbind C-a
+bind C-s send-prefix -2
+
+# clear both screen and history
+unbind C-l
+bind C-S-l send-keys C-l \; run 'sleep 0.2' \; clear-history
+
+# Split current window vertically
+bind | split-window -h
+
+# set more vim-like commands in copy mode
+unbind -T copy-mode-vi H
+unbind -T copy-mode-vi L
+bind -T copy-mode-vi 0 send -X start-of-line
+bind -T copy-mode-vi $ send -X end-of-line
+
+# start with mouse mode enabled
+set -g mouse on
+
+# if you don't want Oh my tmux! to alter a binding or a setting, use #!important
+# bind c new-window -c '#{pane_current_path}' #!important
+
+# display a message after toggling mouse support
+bind m run "cut -c3- '#{TMUX_CONF}' | sh -s _toggle_mouse" \; display 'mouse #{?#{mouse},on,off}'
+
+# Turn off monitor activity for panes with Neovim
+set -g @is_nvim 'tmux display -p "#{pane_current_command}" | grep -iq "^nvim$"'
+set-hook -g pane-focus-in \
+  'if-shell "#{@is_nvim}" "setw monitor-activity off" "setw monitor-activity on"'
+set-hook -g pane-focus-out \
+  'if-shell "#{@is_nvim}" "setw monitor-activity off" "setw monitor-activity on"'
+set-hook -g pane-died 'setw monitor-activity on'
+
+# These three lines are suggested by yazi to make image preview work correctly
+# in tmux
+set -g allow-passthrough on
+set -ga update-environment TERM
+set -ga update-environment TERM_PROGRAM
+
+set -g main-pane-height 70%
+
+# -- catppuccin ----------------------------------------------------------------
+# All @catppuccin option MUST be set before catppuccin is loaded
+# All options not starting with @ MUST be set after catppuccin is loaded
+
+set -g @catppuccin_window_current_text "#W"
+set -g @catppuccin_window_text "#W"
+set -g @catppuccin_window_number_position "right"
+set -g @catppuccin_window_flags "icon" # none, icon, or text
+
+set -g @catppuccin_flavor "frappe"
+set -g @catppuccin_window_status_style "rounded"
+
+# Status line options
+set -g @catppuccin_status_left_separator " "
+set -g @catppuccin_status_middle_separator ""
+set -g @catppuccin_status_right_separator ""
+set -g @catppuccin_status_connect_separator "yes" # yes, no
+set -g @catppuccin_status_fill "icon"
+set -g @catppuccin_status_module_bg_color "#{@thm_surface_0}"
+# Load catppuccin
+run ~/.config/tmux/plugins/catppuccin/tmux/catppuccin.tmux
+
+# This doesn't seem to work
+# set -g window-status-activity-style "bg=#{@thm_red},fg=#{@thm_bg}"
+
+# Make the status line pretty and add some modules
+set -g status-right-length 100
+set -g status-left-length 100
+set -g status-left ""
+set -g status-right "#{E:@catppuccin_status_application}"
+set -ag status-right "#{E:@catppuccin_status_session}"
+set -g @catppuccin_date_time_text " %a %d %b %-I:%M%p"
+set -agF status-right "#{E:@catppuccin_status_date_time}"
+
+# move status line to top
+set -g status-position top
+
+
+# -- vim-tmux-naivgator --------------------------------------------------------
+
+# Smart pane switching with awareness of Vim splits.
+# See: https://github.com/christoomey/vim-tmux-navigator
+vim_pattern='(\S+/)?g?\.?(view|l?n?vim?x?|fzf)(diff)?(-wrapped)?'
+is_vim="ps -o state= -o comm= -t '#{pane_tty}' \
+    | grep -iqE '^[^TXZ ]+ +${vim_pattern}$'"
+
+bind-key -n 'C-h' if-shell "$is_vim" 'send-keys C-h'  'select-pane -L'
+bind-key -n 'C-j' if-shell "$is_vim" 'send-keys C-j'  'select-pane -D'
+bind-key -n 'C-k' if-shell "$is_vim" 'send-keys C-k'  'select-pane -U'
+bind-key -n 'C-l' if-shell "$is_vim" 'send-keys C-l'  'select-pane -R'
+
+tmux_version='$(tmux -V | sed -En "s/^tmux ([0-9]+(.[0-9]+)?).*/\1/p")'
+
+if-shell -b '[ "$(echo "$tmux_version < 3.0" | bc)" = 1 ]' \
+    "bind-key -n 'C-\\' if-shell \"$is_vim\" 'send-keys C-\\'  'select-pane -l'"
+if-shell -b '[ "$(echo "$tmux_version >= 3.0" | bc)" = 1 ]' \
+    "bind-key -n 'C-\\' if-shell \"$is_vim\" 'send-keys C-\\\\'  'select-pane -l'"
+
+bind-key -T copy-mode-vi 'C-h' select-pane -L
+bind-key -T copy-mode-vi 'C-j' select-pane -D
+bind-key -T copy-mode-vi 'C-k' select-pane -U
+bind-key -T copy-mode-vi 'C-l' select-pane -R
+bind-key -T copy-mode-vi 'C-\' select-pane -l
+
+
+# -- tpm -----------------------------------------------------------------------
+
+# while I don't use tpm myself, many people requested official support so here
+# is a seamless integration that automatically installs plugins in parallel
+
+# whenever a plugin introduces a variable to be used in 'status-left' or
+# 'status-right', you can use it in 'tmux_conf_theme_status_left' and
+# 'tmux_conf_theme_status_right' variables.
+
+# by default, launching tmux will update tpm and all plugins
+#   - true (default)
+#   - false
+tmux_conf_update_plugins_on_launch=true
+
+# by default, reloading the configuration will update tpm and all plugins
+#   - true (default)
+#   - false
+tmux_conf_update_plugins_on_reload=true
+
+# by default, reloading the configuration will uninstall tpm and plugins when no
+# plugins are enabled
+#   - true (default)
+#   - false
+tmux_conf_uninstall_plugins_on_reload=true
+
+# /!\ the tpm bindings differ slightly from upstream:
+#   - installing plugins: <prefix> + I
+#   - uninstalling plugins: <prefix> + Alt + u
+#   - updating plugins: <prefix> + u
+
+# /!\ do not add set -g @plugin 'tmux-plugins/tpm'
+# /!\ do not add run '~/.tmux/plugins/tpm/tpm'
+
+# /!\ the 'set -g @tpm_plugins' syntax is not supported
+# to enable a plugin, use the 'set -g @plugin' syntax:
+# visit https://github.com/tmux-plugins for available plugins
+#set -g @plugin 'tmux-plugins/tmux-copycat'
+#set -g @plugin 'tmux-plugins/tmux-cpu'
+#set -g @plugin 'tmux-plugins/tmux-resurrect'
+#set -g @plugin 'tmux-plugins/tmux-continuum'
+#set -g @continuum-restore 'on'
+
+
+# -- custom variables ----------------------------------------------------------
+
+# to define a custom #{foo} variable, define a POSIX shell function between the
+# '# EOF' and the '# "$@"' lines. Please note that the opening brace { character
+# must be on the same line as the function name otherwise the parse won't detect
+# it.
+#
+# then, use #{foo} in e.g. the 'tmux_conf_theme_status_left' or the
+# 'tmux_conf_theme_status_right' variables.
+
+# ------------------------------------------------------------------------------
+
+# # /!\ do not remove the following line
+# EOF
+#
+# # /!\ do not "uncomment" the functions: the leading "# " characters are needed
+#
+# # usage: #{weather}
+# weather() {                                         # see https://github.com/chubin/wttr.in#one-line-output
+#   curl -f -s -m 2 'wttr.in?format=3' || printf '\n' # /!\ make sure curl is installed
+#   sleep 900                                         # sleep for 15 minutes, throttle network requests whatever the value of status-interval
+# }
+#
+# # usage: #{online}
+# online() {
+#   ping -c 1 1.1.1.1 >/dev/null 2>&1 && printf '✔' || printf '✘'
+# }
+#
+# # usage: #{wan_ip_v4}
+# wan_ip_v4() {
+#   curl -f -s -m 2 -4 ifconfig.me
+#   sleep 300                                         # sleep for 5 minutes, throttle network requests whatever the value of status-interval
+# }
+#
+# # usage: #{wan_ip_v6}
+# wan_ip_v6() {
+#   curl -f -s -m 2 -6 ifconfig.me
+#   sleep 300                                         # sleep for 5 minutes, throttle network requests whatever the value of status-interval
+# }
+#
+# # usage: #{github_stars}, #{github_stars tmux/tmux}, ...
+# github_stars() {
+#   repository=${1##*https://github.com/}
+#   repository=${repository%% *}
+#   repository=${repository%%.git}
+#   url="https://api.github.com/repos/${repository:-gpakosz/.tmux}"
+#   curl -s "$url" | perl -MJSON::PP=decode_json -CO -0777 -E '$response = decode_json(readline *STDIN); say ($response->{stargazers_count})'
+#   sleep 300                                         # sleep for 5 minutes, throttle network requests whatever the value of status-interval
+# }
+#
+# "$@"
+# # /!\ do not remove the previous line
+# #     do not write below this line

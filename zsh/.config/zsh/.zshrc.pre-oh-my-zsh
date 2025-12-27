@@ -1,0 +1,103 @@
+# +------------+
+# | NAVIGATION |
+# +------------+
+
+setopt AUTO_CD              # Go to folder path without using cd.
+
+setopt AUTO_PUSHD           # Push the old directory onto the stack on cd.
+setopt PUSHD_IGNORE_DUPS    # Do not store duplicates in the stack.
+setopt PUSHD_SILENT         # Do not print the directory stack after pushd or popd.
+
+source $ZDOTDIR/plugins/bd.zsh
+
+# +---------+
+# | HISTORY |
+# +---------+
+
+setopt SHARE_HISTORY       # Share history between all sessions.
+setopt HIST_IGNORE_DUPS    # Do not record an event that was just recorded again.
+
+# +--------+
+# | COLORS |
+# +--------+
+
+# Override colors
+export CLICOLOR=1
+export LSCOLORS=GxFxCxDxBxegedabagaced
+
+# +---------+
+# | ALIASES |
+# +---------+
+
+source $HOME/.dotfiles/aliases/aliases
+
+# +--------+
+# | PROMPT |
+# +--------+
+
+function parse_git_branch() {
+    git branch 2> /dev/null | sed -n -e 's/^\* \(.*\)/[\1] /p'
+}
+
+COLOR_DEF=$'%f'
+COLOR_GIT=$'%F{39}'
+setopt PROMPT_SUBST
+export PROMPT='${COLOR_GIT}$(parse_git_branch)${COLOR_DEF}%1~ %# '
+
+# +-----------+
+# | VI KEYMAP |
+# +-----------+
+
+# Vi mode
+bindkey -v
+export KEYTIMEOUT=1
+
+# Change cursor
+source "$ZDOTDIR/plugins/cursor_mode"
+
+# +------------+
+# | COMPLETION |
+# +------------+
+
+source $ZDOTDIR/completion.zsh
+
+# +---------+
+# | BINDING |
+# +---------+
+
+# edit current command line with vim (vim-mode, then CTRL-v)
+autoload -Uz edit-command-line
+zle -N edit-command-line
+bindkey -M vicmd '^v' edit-command-line
+
+# +---------------------+
+# | SYNTAX HIGHLIGHTING |
+# +---------------------+
+
+source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# +-------------+
+# | OTHER STUFF |
+# +-------------+
+
+# brew doctor advice
+export PATH="/usr/local/sbin:$PATH"
+
+# iTerm Shell Integration
+source ~/.iterm2_shell_integration.zsh
+
+# MuseScore command line (change to MuseScore 4)
+#export PATH="$PATH:/Applications/MuseScore 3.app/Contents/MacOS/"
+export PATH="$PATH:/Applications/MuseScore 4.app/Contents/MacOS/"
+export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/App/bin"
+
+# pyenv stuff
+eval "$(pyenv virtualenv-init -)"
+PATH=$(pyenv root)/shims:$PATH
+PATH=$(pyenv root)/versions/3.12.0/bin:$PATH
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init -)"
+fi
+
+# Point pipx to the pyenv global Python version
+PIPX_DEFAULT_PYTHON="$(pyenv root)/versions/3.12.0/bin/python"
