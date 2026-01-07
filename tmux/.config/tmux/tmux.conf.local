@@ -142,7 +142,6 @@ unbind C-a
 bind C-s send-prefix -2
 
 # clear both screen and history
-unbind C-l
 bind C-S-l send-keys C-l \; run 'sleep 0.2' \; clear-history
 
 # Split current window vertically
