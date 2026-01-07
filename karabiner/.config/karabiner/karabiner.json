@@ -97,13 +97,21 @@
                     ]
                   }
                 },
-                "to": [{ "shell_command": "open -a Ghostty.app" }],
+                "to": [
+                  {
+                    "software_function": {
+                      "open_application": {
+                        "bundle_identifier": "com.mitchellh.ghostty"
+                      }
+                    }
+                  }
+                ],
                 "type": "basic"
               }
             ]
           },
           {
-            "description": "HYPER + W opens Work apps",
+            "description": "HYPER + W opens Work environment",
             "manipulators": [
               {
                 "from": {
