@@ -47,13 +47,17 @@ root: ~/Documents/Uni/MasterThesis/code/LCBLM/
 attach: true
 
 windows:
-    - editor:
-          layout: main-horizontal
-          panes:
-              - editor:
-                    - tmux resize-pane -y 70%
-                    - tmux resize-pane -Z
-                    - nvim
-              - terminal:
-                    - null
-    - null:
+  - editor:
+      layout: main-horizontal
+      panes:
+        - editor:
+            - tmux resize-pane -y 70%
+            - tmux resize-pane -Z
+            - nvim
+        - terminal:
+            - null
+  - null:
+      panes:
+        - null:
+            - lazygit
+  - null:
