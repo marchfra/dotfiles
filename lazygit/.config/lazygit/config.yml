@@ -1,0 +1,7 @@
+customCommands:
+  - key: "C"
+    command: "uv run cz c"
+    description: "commit with commitizen"
+    context: "files"
+    loadingText: "opening commitizen commit tool"
+    output: terminal
