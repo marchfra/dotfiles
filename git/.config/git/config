@@ -1,0 +1,8 @@
+[user]
+	name = Francesco Marchisotti
+	email = francesco.marchisotti@gmail.com
+[core]
+	autocrlf = input
+	excludesFile = ~/.config/git/global_ignore
+[init]
+	defaultBranch = main
