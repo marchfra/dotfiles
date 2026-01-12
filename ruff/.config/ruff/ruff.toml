@@ -71,15 +71,14 @@ lint.extend-select = [
 
 lint.ignore = [
     # "E501",  # Pycodestyle - line too long
-    "D100",    # Pydocstyle - missing docstring in public module
-    # "D101",    # Pydocstyle - missing docstring in public class
-    # "D102",    # Pydocstyle - missing docstring in public method
-    # "D103",    # Pydocstyle - missing docstring in public function
-    "D104",    # Pydocstyle - missing docstring in public package
-    "D105",    # Pydocstyle - missing docstring in magic method
-    "D106",    # Pydocstyle - missing docstring in public nested class
-    # "D107",    # Pydocstyle - missing docstring in __init__
-    # "FBT003", # Flake8-boolean-trap - boolean position value in function call
+    "D100", # Pydocstyle - missing docstring in public module
+    "D101", # Pydocstyle - missing docstring in public class
+    "D102", # Pydocstyle - missing docstring in public method
+    "D103", # Pydocstyle - missing docstring in public function
+    "D104", # Pydocstyle - missing docstring in public package
+    "D105", # Pydocstyle - missing docstring in magic method
+    "D106", # Pydocstyle - missing docstring in public nested class
+    "D107", # Pydocstyle - missing docstring in __init__
     # "D203",  # Pydocstyle - one blank line required before class docstring
     # "D212",  # Pydocstyle - summary line should be immediately after the opening quotes.
     # "D401",  # Pydocstyle - Checks for docstring first lines that are not in an imperative mood.
