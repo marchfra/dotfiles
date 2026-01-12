@@ -8,36 +8,36 @@
 # ]
 
 lint.extend-select = [
-    "E",    # Pycodestyle errors (style issues)
-    "W",    # Pycodestyle warnings (style issues)
-    "C90",  # McCabe – complexity metric for functions
-    "I",    # isort – import ordering checks
-    "N",    # PEP8 Naming – naming conventions
-    "D",    # Pydocstyle – docstring formatting
-    "UP",   # Pyupgrade – upgrades syntax to newer Python versions
-    "YTT",  # Flake8-2020 – checks for Python 2020 best practices
-    "ANN",  # Flake8-annotations – enforces type annotation style
-    "ASYNC",# Flake8-async – checks async/await usage
-    "S",    # Flake8-bandit – security issues
-    "BLE",  # Flake8-blind-except – flags bare excepts
-    "FBT",  # Flake8-boolean-trap – potential pitfalls with booleans
-    "B",    # Flake8-bugbear – common bug patterns
-    "A",    # Flake8-builtins – misuse of Python built-in names
-    "COM",  # Flake8-commas – trailing/comma issues
+    "E",     # Pycodestyle errors (style issues)
+    "W",     # Pycodestyle warnings (style issues)
+    "C90",   # McCabe – complexity metric for functions
+    "I",     # isort – import ordering checks
+    "N",     # PEP8 Naming – naming conventions
+    "D",     # Pydocstyle – docstring formatting
+    "UP",    # Pyupgrade – upgrades syntax to newer Python versions
+    "YTT",   # Flake8-2020 – checks for Python 2020 best practices
+    "ANN",   # Flake8-annotations – enforces type annotation style
+    "ASYNC", # Flake8-async – checks async/await usage
+    "S",     # Flake8-bandit – security issues
+    "BLE",   # Flake8-blind-except – flags bare excepts
+    "FBT",   # Flake8-boolean-trap – potential pitfalls with booleans
+    "B",     # Flake8-bugbear – common bug patterns
+    "A",     # Flake8-builtins – misuse of Python built-in names
+    "COM",   # Flake8-commas – trailing/comma issues
     # "CPY",  # Flake8-copyright – copyright header checks
-    "C4",   # Flake8-comprehensions – best practices in comprehensions
-    "DTZ",  # Flake8-datetimez – requires timezone-aware datetime objects
-    "T10",  # Flake8-debugger – debugger statements (e.g. pdb)
-    "DJ",   # Flake8-django – Django-specific conventions
-    "EM",   # Flake8-errmsg – error message style
-    "EXE",  # Flake8-executable – executable file checks
-    "FA",   # Flake8-future-annotations – future import for annotations
-    "ISC",  # Flake8-implicit-str-concat – warns on implicit string concatenation
-    "ICN",  # Flake8-import-conventions – enforces conventional import aliases
-    "LOG",  # Flake8-logging – proper logging usage
-    "G",    # Flake8-logging-format – logging format string issues
-    "INP",  # Flake8-no-pep420 – warns against non-PEP420 namespace usage
-    "PIE",  # Flake8-pie – Python improvement suggestions
+    "C4",  # Flake8-comprehensions – best practices in comprehensions
+    "DTZ", # Flake8-datetimez – requires timezone-aware datetime objects
+    "T10", # Flake8-debugger – debugger statements (e.g. pdb)
+    "DJ",  # Flake8-django – Django-specific conventions
+    "EM",  # Flake8-errmsg – error message style
+    "EXE", # Flake8-executable – executable file checks
+    "FA",  # Flake8-future-annotations – future import for annotations
+    "ISC", # Flake8-implicit-str-concat – warns on implicit string concatenation
+    "ICN", # Flake8-import-conventions – enforces conventional import aliases
+    "LOG", # Flake8-logging – proper logging usage
+    "G",   # Flake8-logging-format – logging format string issues
+    "INP", # Flake8-no-pep420 – warns against non-PEP420 namespace usage
+    "PIE", # Flake8-pie – Python improvement suggestions
     # "T20",  # Flake8-print – disallows print statements
     "PYI",  # Flake8-pyi – checks for type stub (.pyi) consistency
     "PT",   # Flake8-pytest-style – pytest best practices
@@ -82,6 +82,7 @@ lint.ignore = [
     # "D203",  # Pydocstyle - one blank line required before class docstring
     # "D212",  # Pydocstyle - summary line should be immediately after the opening quotes.
     # "D401",  # Pydocstyle - Checks for docstring first lines that are not in an imperative mood.
+    # "FBT003", # Flake8-boolean-trap - boolean position value in function call
     # "S311",  # Flake8-bandit - Standard pseudo-random generators are not suitable for security/cryptographic purposes
     # "PERF401", # Perflint - Checks for for loops that can be replaced by a list comprehension.
     # "RET504", # Flake8-return - Checks for variable assignments that immediately precede a return of the assigned variable.
