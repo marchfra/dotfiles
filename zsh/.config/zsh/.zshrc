@@ -1,6 +1,7 @@
 # These are needed for the colorls package
 export PATH="$(brew --prefix ruby)/bin:$PATH"
 export PATH="$(ruby -r rubygems -e 'puts Gem.bindir'):$PATH"
+source $(dirname $(gem which colorls))/tab_complete.sh
 
 # plugins=(git zsh-syntax-highlighting zsh-autosuggestions)
 
