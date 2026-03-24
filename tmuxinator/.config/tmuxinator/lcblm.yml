@@ -58,7 +58,7 @@ windows:
             - null
   - lazygit: lazygit
   - null:
-  - LCBM:
-      root: ~/Documents/Uni/MasterThesis/code/Learnable-Concept-Based-Model/
-      panes:
-        - nvim
+  # - LCBM:
+  #     root: ~/Documents/Uni/MasterThesis/code/Learnable-Concept-Based-Model/
+  #     panes:
+  #       - nvim
