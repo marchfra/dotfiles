@@ -118,4 +118,7 @@ function y() {
     rm -f -- "$tmp"
 }
 
+# override default tealdeer (tldr) config directory
+export TEALDEER_CONFIG_DIR="/Users/francescomarchisotti/.config/tealdeer/"
+
 eval "$(starship init zsh)"
