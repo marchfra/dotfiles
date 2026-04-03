@@ -141,6 +141,9 @@ set -g prefix C-s
 set -g prefix2 C-s  # remove C-a from prefix
 bind C-s send-prefix
 
+# Redraw status line every X seconds
+set -g status-interval 3
+
 # clear both screen and history
 bind C-S-l send-keys C-l \; run 'sleep 0.2' \; clear-history
 
@@ -209,14 +212,15 @@ set -g status-left-length 100
 set -g status-left ""
 set -g status-right "#{E:@catppuccin_status_application}"
 set -ag status-right "#{E:@catppuccin_status_session}"
-set -g @catppuccin_date_time_text " %a %d %b %-I:%M%p"
+set -g @catppuccin_date_time_text " %a %d %b %-I:%M %p"
 set -agF status-right "#{E:@catppuccin_status_date_time}"
+set -ag status-right "#($HOME/.config/tmux/scripts/cal.sh)"  # the colors are configured inside the cal.sh script
 
 # move status line to top
 set -g status-position top
 
 
-# -- vim-tmux-naivgator --------------------------------------------------------
+# -- vim-tmux-navigator --------------------------------------------------------
 
 # Smart pane switching with awareness of Vim splits.
 # See: https://github.com/christoomey/vim-tmux-navigator
