@@ -20,3 +20,4 @@ export SAVEHIST=10000                   # Maximum events in history file
 # locale
 export LANG="en_US.UTF-8"
 
+source "$ZDOTDIR/.zshenv"
