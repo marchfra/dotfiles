@@ -1,2 +1,2 @@
 # uv
-export PATH="/Users/francescomarchisotti/.config/local/share/../bin:$PATH"
+path=("$XDG_CONFIG_HOME/local/bin" $path)

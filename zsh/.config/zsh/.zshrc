@@ -1,33 +1,42 @@
-# These are needed for the colorls package
-export PATH="$(brew --prefix ruby)/bin:$PATH"
-export PATH="$(ruby -r rubygems -e 'puts Gem.bindir'):$PATH"
-source $(dirname $(gem which colorls))/tab_complete.sh
+# ---------- diagnostics ----------
+zrc_warn() {
+    print -P "%F{yellow}[zshrc]%f $*" >&2
+}
 
-# plugins=(git zsh-syntax-highlighting zsh-autosuggestions)
+zrc_has() {
+    command -v "$1" >/dev/null 2>&1
+}
 
-source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# ---------- base paths ----------
+if zrc_has brew; then
+    HOMEBREW_PREFIX="$(brew --prefix)"
+else
+    HOMEBREW_PREFIX=""
+    zrc_warn "brew not found"
+fi
 
-# User configuration
+path=("/usr/local/sbin" $path)
 
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='nvim'
-# fi
+# Ruby path from Homebrew (for colorls) if available
+if [[ -n "$HOMEBREW_PREFIX" && -d "$HOMEBREW_PREFIX/opt/ruby/bin" ]]; then
+    path=("$HOMEBREW_PREFIX/opt/ruby/bin" $path)
+else
+    zrc_warn "Homebrew ruby bin path not found"
+fi
 
-# Set personal aliases, overriding those provided by Oh My Zsh libs,
-# plugins, and themes. Aliases can be placed here, though Oh My Zsh
-# users are encouraged to define aliases within a top-level file in
-# the $ZSH_CUSTOM folder, with .zsh extension. Examples:
-# - $ZSH_CUSTOM/aliases.zsh
-# - $ZSH_CUSTOM/macos.zsh
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
+# ---------- colorls completion ----------
+if zrc_has gem && zrc_has ruby && gem which colorls >/dev/null 2>&1; then
+    colorls_tab="$(dirname "$(gem which colorls)")/tab_complete.sh"
+    gem_bindir="$(ruby -r rubygems -e 'puts Gem.bindir')"
+    [[ -d "$gem_bindir" ]] && path=("$gem_bindir" $path)
+    if [[ -r "$colorls_tab" ]]; then
+        source "$colorls_tab"
+    else
+        zrc_warn "colorls tab completion script not readable: $colorls_tab"
+    fi
+else
+    zrc_warn "colorls completion disabled (missing gem/ruby or colorls gem)"
+fi
 
 # +------------+
 # | NAVIGATION |
@@ -51,6 +60,12 @@ setopt HIST_IGNORE_DUPS    # Do not record an event that was just recorded again
 # +---------+
 
 source $XDG_CONFIG_HOME/aliases/aliases
+
+# +------------+
+# | COMPLETION |
+# +------------+
+
+source $ZDOTDIR/completion.zsh
 
 # +-----------+
 # | VI KEYMAP |
@@ -76,49 +91,82 @@ bindkey -M vicmd '^v' edit-command-line
 # | other stuff |
 # +-------------+
 
-# brew doctor advice
-export PATH="/usr/local/sbin:$PATH"
+# MuseScore CLI
+if [[ -d "/Applications/MuseScore 4.app/Contents/MacOS" ]]; then
+    path+=("/Applications/MuseScore 4.app/Contents/MacOS")
+else
+    zrc_warn "MuseScore CLI path not found"
+fi
 
-# iTerm Shell Integration
-source ~/.iterm2_shell_integration.zsh
-
-export PATH="$PATH:/Applications/MuseScore 4.app/Contents/MacOS/"  # MuseScore command line
-export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/App/bin"
-
-# # pyenv stuff
-# eval "$(pyenv virtualenv-init -)"
-# PATH=$(pyenv root)/shims:$PATH
-# PATH=$(pyenv root)/versions/3.12.0/bin:$PATH
-# if command -v pyenv 1>/dev/null 2>&1; then
-#   eval "$(pyenv init -)"
-# fi
-
-# Point pipx to the pyenv global Python version
-PIPX_DEFAULT_PYTHON="$(pyenv root)/versions/3.12.0/bin/python"
-
-# zoxide is a better cd
-eval "$(zoxide init --cmd cd zsh)"
+# VSCode CLI
+if [[ -d "/Applications/Visual Studio Code.app/Contents/Resources/App/bin" ]]; then
+path+=("/Applications/Visual Studio Code.app/Contents/Resources/App/bin")
+else
+zrc_warn "VS Code CLI path not found"
+fi
 
 # uv set to use managed python by default
 export UV_MANAGED_PYTHON=true
 
-# Set up fzf key bindings and fuzzy completion
-source <(fzf --zsh)
-export FZF_DEFAULT_COMMAND='fd . --hidden --exclude ".git"'
-export FZF_DEFAULT_OPTS="--style=full --preview='bat --color=always {}'"
+# override default tealdeer (tldr) config directory
+export TEALDEER_CONFIG_DIR="/Users/francescomarchisotti/.config/tealdeer/"
+
+# iTerm integration
+if [[ -r "$HOME/.iterm2_shell_integration.zsh" ]]; then
+    source "$HOME/.iterm2_shell_integration.zsh"
+else
+    zrc_warn "iTerm integration script not found"
+fi
+
+# zoxide
+if zrc_has zoxide; then
+    eval "$(zoxide init --cmd cd zsh)"
+else
+    zrc_warn "zoxide not found"
+fi
+
+# fzf
+if zrc_has fzf; then
+    source <(fzf --zsh)
+    export FZF_DEFAULT_COMMAND='fd . --hidden --exclude ".git"'
+    export FZF_DEFAULT_OPTS="--style=full --preview='bat --color=always {}'"
+else
+    zrc_warn "fzf not found; key bindings and fuzzy completion disabled"
+fi
 
 # yazi shell wrapper to change CWD when exiting yazi
 # Use y instead of yazi to start, and press q to quit, you'll see the CWD
 # changed. Sometimes, you don't want to change, press Q to quit.
 function y() {
-    local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+    if ! zrc_has yazi; then
+        zrc_warn "yazi not found"
+        return 127
+    fi
+    local tmp cwd
+    tmp="$(mktemp -t "yazi-cwd.XXXXXX")" || return
     yazi "$@" --cwd-file="$tmp"
-    IFS= read -r -d '' cwd < "$tmp"
-    [ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
+    IFS= read -r cwd < "$tmp"
+    [[ -n "$cwd" && "$cwd" != "$PWD" ]] && builtin cd -- "$cwd"
     rm -f -- "$tmp"
 }
 
-# override default tealdeer (tldr) config directory
-export TEALDEER_CONFIG_DIR="/Users/francescomarchisotti/.config/tealdeer/"
+# starship
+if zrc_has starship; then
+    eval "$(starship init zsh)"
+else
+    zrc_warn "starship not found"
+fi
 
-eval "$(starship init zsh)"
+# zsh-autosuggestions
+if [[ -n "$HOMEBREW_PREFIX" && -r "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]]; then
+    source "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+else
+    zrc_warn "zsh-autosuggestions not found"
+fi
+
+# zsh-syntax-highlighting (keep as last sourced plugin)
+if [[ -n "$HOMEBREW_PREFIX" && -r "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]]; then
+    source "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+else
+    zrc_warn "zsh-syntax-highlighting not found"
+fi
