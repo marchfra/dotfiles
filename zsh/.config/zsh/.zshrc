@@ -28,6 +28,14 @@ source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zs
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+# ---------- diagnostics ----------
+zrc_warn() {
+    print -P "%F{yellow}[zshrc]%f $*" >&2
+}
+
+zrc_has() {
+    command -v "$1" >/dev/null 2>&1
+}
 
 # +------------+
 # | NAVIGATION |
