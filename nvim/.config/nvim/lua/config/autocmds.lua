@@ -47,7 +47,13 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 vim.api.nvim_create_autocmd("User", {
   pattern = "LazyUpdate",
   callback = function()
-    local repo_dir = "/Users/francescomarchisotti/dotfiles/"
+    local config_dir = vim.fn.resolve(vim.fn.stdpath("config"))
+    local repo_dir = config_dir:gsub("/nvim/%.config/nvim$", "")
+
+    if repo_dir == config_dir then
+      repo_dir = (vim.env.HOME or "") .. "/dotfiles"
+    end
+
     local lockfile = repo_dir .. "/nvim/.config/nvim/lazy-lock.json"
 
     local cmd = {

@@ -109,7 +109,7 @@ fi
 export UV_MANAGED_PYTHON=true
 
 # override default tealdeer (tldr) config directory
-export TEALDEER_CONFIG_DIR="/Users/francescomarchisotti/.config/tealdeer/"
+export TEALDEER_CONFIG_DIR="${XDG_CONFIG_HOME}/tealdeer"
 
 # iTerm integration
 if [[ -r "$HOME/.iterm2_shell_integration.zsh" ]]; then
