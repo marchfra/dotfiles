@@ -52,6 +52,12 @@ setopt HIST_IGNORE_DUPS    # Do not record an event that was just recorded again
 
 source $XDG_CONFIG_HOME/aliases/aliases
 
+# +------------+
+# | COMPLETION |
+# +------------+
+
+source $ZDOTDIR/completion.zsh
+
 # +-----------+
 # | VI KEYMAP |
 # +-----------+
