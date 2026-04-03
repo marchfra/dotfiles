@@ -9,6 +9,8 @@ else
     export EDITOR="nvim"
 fi
 
+typeset -U path PATH  # deduplicate path
+
 # zsh
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 export HISTFILE="$ZDOTDIR/.zhistory"    # History filepath
