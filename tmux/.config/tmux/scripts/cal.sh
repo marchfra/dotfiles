@@ -92,7 +92,7 @@ display_popup() {
         -w50% \
         -h50% \
         -d '#{pane_current_path}' \
-        -T meeting \
+        -T " Meeting " \
         icalBuddy \
         --propertyOrder "datetime,title" \
         --noCalendarNames \
@@ -134,7 +134,6 @@ main() {
         calculate_times
     fi
     print_tmux_status
-    # echo "$minutes_till_meeting | $number_of_attendees"
 }
 
 main
