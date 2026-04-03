@@ -159,6 +159,9 @@ bind -T copy-mode-vi $ send -X end-of-line
 # start with mouse mode enabled
 set -g mouse on
 
+bind C-t display-popup -E "zsh"
+bind C-p display-popup -E "uv run python"
+
 # if you don't want Oh my tmux! to alter a binding or a setting, use #!important
 # bind c new-window -c '#{pane_current_path}' #!important
 
