@@ -111,6 +111,26 @@ export UV_MANAGED_PYTHON=true
 # override default tealdeer (tldr) config directory
 export TEALDEER_CONFIG_DIR="/Users/francescomarchisotti/.config/tealdeer/"
 
+# sesh
+if zrc_has sesh && zrc_has fzf; then
+    function sesh-sessions() {
+        {
+            exec </dev/tty
+            local session
+            session=$(sesh list | fzf --height 40% --reverse --border-label ' sesh ' --border --prompt '⚡  ')
+            zle reset-prompt > /dev/null 2>&1 || true
+            [[ -z "$session" ]] && return
+            sesh connect "$session"
+        }
+    }
+    zle     -N             sesh-sessions
+    bindkey -M emacs '\es' sesh-sessions
+    bindkey -M vicmd '\es' sesh-sessions
+    bindkey -M viins '\es' sesh-sessions
+else
+    zrc_warn "sesh keybinding disabled (missing sesh or fzf)"
+fi
+
 # iTerm integration
 if [[ -r "$HOME/.iterm2_shell_integration.zsh" ]]; then
     source "$HOME/.iterm2_shell_integration.zsh"
