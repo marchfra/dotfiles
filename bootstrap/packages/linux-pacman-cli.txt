@@ -1,0 +1,22 @@
+# Core
+git
+stow
+zsh
+curl
+
+# Shell and terminal tooling
+starship
+zoxide
+fzf
+fd
+bat
+tealdeer
+
+# Editor and dev workflow
+neovim
+tmux
+tmuxinator
+lazygit
+yazi
+uv
+ripgrep

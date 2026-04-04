@@ -1,0 +1,26 @@
+# Core
+git
+stow
+zsh
+curl
+
+# Shell and terminal tooling
+fzf
+zoxide
+tmux
+tmuxinator
+neovim
+
+# Search and preview
+fd-find
+bat
+ripgrep
+
+# Utilities used by this setup
+tealdeer
+
+# Optional tools that may require newer repos depending on distro version
+# starship
+# lazygit
+# yazi
+# uv

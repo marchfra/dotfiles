@@ -1,0 +1,12 @@
+# Linux GUI package availability varies by distro release and repositories.
+# Keep this list as a target profile; installer will treat missing packages as optional.
+
+# Terminal and editors
+# ghostty
+# code
+
+# Fonts used by terminal/prompt themes
+fonts-hack-ttf
+
+# PDF viewer used by vimtex setup
+zathura

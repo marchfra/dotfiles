@@ -1,0 +1,13 @@
+# Terminal and editors
+ghostty
+visual-studio-code
+
+# Input and pointing device tools
+karabiner-elements
+linearmouse
+
+# Fonts used by terminal/prompt themes
+font-hack-nerd-font
+
+# Optional app path currently referenced by zsh config
+musescore

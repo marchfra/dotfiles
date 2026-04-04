@@ -1,0 +1,9 @@
+# Terminal and editors
+ghostty
+code
+
+# Fonts used by terminal/prompt themes
+ttf-hack-nerd
+
+# PDF viewer used by vimtex setup
+zathura

@@ -1,0 +1,23 @@
+# Core
+git
+stow
+zsh
+
+# Shell and terminal tooling
+starship
+zoxide
+fzf
+fd
+bat
+tealdeer
+
+# Editor and dev workflow
+neovim
+tmux
+tmuxinator
+lazygit
+yazi
+uv
+
+# Optional helper for colorls completion in zsh
+ruby
