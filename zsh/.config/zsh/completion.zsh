@@ -5,11 +5,11 @@ zmodload zsh/complist
 if command -v brew >/dev/null 2>&1; then
   fpath=("$(brew --prefix)/share/zsh/site-functions" $fpath)
 fi
-fpath=("$HOME/.config/zsh/completions" $fpath)
+fpath=("$XDG_CONFIG_HOME/zsh/completions" $fpath)
 
 # Completion behavior
 autoload -Uz compinit
-compinit -d "$HOME/.cache/zsh/.zcompdump"
+compinit -d "$XDG_CACHE_HOME/zsh/.zcompdump"
 _comp_options+=(globdots)
 
 # Use hjlk in menu selection (during completion)

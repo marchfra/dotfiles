@@ -2,7 +2,10 @@
 
 set -euo pipefail
 
-CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/platform.sh"
+
+CONFIG_HOME="$(xdg_config_home)"
 DEFAULT_OUTFILE="$CONFIG_HOME/dotfiles/bootstrap.env"
 OUTFILE="${BOOTSTRAP_PERSONALIZATION_FILE:-$DEFAULT_OUTFILE}"
 NON_INTERACTIVE="${BOOTSTRAP_NONINTERACTIVE:-0}"

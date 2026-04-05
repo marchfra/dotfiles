@@ -61,3 +61,7 @@ is_supported_platform() {
 
   [[ "$os" != "unsupported" && "$pkg" != "unsupported" ]]
 }
+
+xdg_config_home() {
+  echo "${XDG_CONFIG_HOME:-$HOME/.config}"
+}

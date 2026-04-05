@@ -205,7 +205,7 @@ install_packages() {
 
 personalization_env_file() {
   local config_home
-  config_home="${XDG_CONFIG_HOME:-$HOME/.config}"
+  config_home="$(xdg_config_home)"
   echo "${BOOTSTRAP_PERSONALIZATION_FILE:-$config_home/dotfiles/bootstrap.env}"
 }
 
@@ -288,7 +288,7 @@ stow_packages() {
   fi
 
   require_cmd stow
-  mkdir -p "$HOME/.config"
+  mkdir -p "$(xdg_config_home)"
 
   while IFS= read -r package; do
     [[ -n "$package" ]] || continue
@@ -313,7 +313,7 @@ stow_packages() {
 }
 
 install_oh_my_tmux() {
-  local tmux_config_dir="$HOME/.config/tmux"
+  local tmux_config_dir="$(xdg_config_home)/tmux"
   local tmux_repo_dir="$tmux_config_dir/oh-my-tmux"
   local tmux_repo_url="https://github.com/gpakosz/.tmux.git"
 
