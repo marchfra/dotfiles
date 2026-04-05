@@ -246,6 +246,25 @@ load_personalization() {
   [[ "$BOOTSTRAP_DOTFILES_DIR" = /* ]] || die "BOOTSTRAP_DOTFILES_DIR must be absolute"
 }
 
+sync_submodules() {
+  local repo_dir="$BOOTSTRAP_DOTFILES_DIR"
+
+  if [[ ! -f "$repo_dir/.gitmodules" ]]; then
+    log "No .gitmodules found; skipping submodule sync"
+    return
+  fi
+
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    log "[dry-run] git -C '$repo_dir' submodule sync --recursive"
+    log "[dry-run] git -C '$repo_dir' submodule update --init --recursive --checkout"
+    return
+  fi
+
+  require_cmd git
+  git -C "$repo_dir" submodule sync --recursive
+  git -C "$repo_dir" submodule update --init --recursive --checkout
+}
+
 apply_git_identity() {
   if [[ "$DRY_RUN" -eq 1 ]]; then
     log "[dry-run] git config --global user.name '$BOOTSTRAP_GIT_NAME'"
@@ -295,15 +314,15 @@ stow_packages() {
     package_count=$((package_count + 1))
 
     log "Checking stow conflicts for package: $package"
-    if ! stow --no-folding --dir="$repo_dir" --target="$target_dir" -n "$package" >/tmp/stow-check.log 2>&1; then
+    if ! stow --dir="$repo_dir" --target="$target_dir" -n "$package" >/tmp/stow-check.log 2>&1; then
       cat /tmp/stow-check.log >&2
       die "Stow conflict detected for '$package'. Resolve conflicts and rerun. Suggested check: stow --dir='$repo_dir' --target='$target_dir' -n '$package'"
     fi
 
     if [[ "$DRY_RUN" -eq 1 ]]; then
-      log "[dry-run] stow --no-folding --dir='$repo_dir' --target='$target_dir' '$package'"
+      log "[dry-run] stow --dir='$repo_dir' --target='$target_dir' '$package'"
     else
-      stow --no-folding --dir="$repo_dir" --target="$target_dir" "$package"
+      stow --dir="$repo_dir" --target="$target_dir" "$package"
     fi
   done < <(discover_stow_packages "$repo_dir")
 
@@ -312,29 +331,8 @@ stow_packages() {
   fi
 }
 
-install_oh_my_tmux() {
-  local tmux_config_dir="$(xdg_config_home)/tmux"
-  local tmux_repo_dir="$tmux_config_dir/oh-my-tmux"
-  local tmux_repo_url="https://github.com/gpakosz/.tmux.git"
-
-  if [[ -d "$tmux_repo_dir" ]]; then
-    log "oh-my-tmux already present at $tmux_repo_dir; skipping clone"
-    return
-  fi
-
-  if [[ "$DRY_RUN" -eq 1 ]]; then
-    log "[dry-run] mkdir -p '$tmux_config_dir'"
-    log "[dry-run] git clone --depth 1 '$tmux_repo_url' '$tmux_repo_dir'"
-    return
-  fi
-
-  require_cmd git
-  mkdir -p "$tmux_config_dir"
-  git clone --depth 1 "$tmux_repo_url" "$tmux_repo_dir"
-}
-
 run_post_bootstrap_hooks() {
-  install_oh_my_tmux
+  :
 }
 
 main() {
@@ -343,6 +341,7 @@ main() {
   install_packages
   run_personalization
   load_personalization
+  sync_submodules
   apply_git_identity
   stow_packages
   run_post_bootstrap_hooks

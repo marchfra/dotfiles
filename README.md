@@ -17,10 +17,11 @@ The bootstrap script currently does the following:
 3. Collects personalization data (git name/email and dotfiles path) via
    [bootstrap/personalize.sh](bootstrap/personalize.sh), with environment
    variable overrides.
-4. Applies git identity globally.
-5. Stows all top-level package directories in the repository (excluding
+4. Syncs and initializes git submodules.
+5. Applies git identity globally.
+6. Stows all top-level package directories in the repository (excluding
    [bootstrap](bootstrap)) with conflict checks.
-6. Runs post-bootstrap hooks, including an idempotent clone of oh-my-tmux into `$XDG_CONFIG_HOME/tmux/oh-my-tmux`.
+7. Runs post-bootstrap hooks (currently reserved as extension points).
 
 ## Useful options
 
@@ -46,6 +47,24 @@ BOOTSTRAP_DOTFILES_DIR="/absolute/path/to/dotfiles"
 
 1. Stow is configured to fail safely on conflicts. Resolve conflicts and rerun
    the script.
-2. `oh-my-tmux` is no longer tracked as repository content; it is cloned by
-   bootstrap if missing.
-3. Existing manual stow workflow still works if you prefer package-by-package control.
+2. `oh-my-tmux` is tracked as a proper git submodule at [tmux/.config/tmux/oh-my-tmux](tmux/.config/tmux/oh-my-tmux).
+3. Submodules are pinned to the exact commit recorded in this repository. `bootstrap/setup.sh` checks out those pinned commits.
+4. To update a submodule intentionally, move it to the desired revision and commit the gitlink update in this repository.
+
+### Updating pinned submodule commits
+
+For any submodule path:
+
+```shell
+cd <submodule-path>
+git fetch origin
+
+# Option A: pin to a specific commit/tag
+git checkout <target-commit-or-tag>
+
+# Option B: move to the most recent commit on the current branch
+git pull --ff-only
+
+cd ~/dotfiles
+git add <submodule-path>
+```
