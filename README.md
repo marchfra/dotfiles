@@ -13,7 +13,7 @@ cd ~/dotfiles
 The bootstrap script currently does the following:
 
 1. Detects supported platforms: macOS + Homebrew, Linux + apt, Linux + pacman.
-2. Installs packages from the platform manifests in [bootstrap/packages](bootstrap/packages).
+2. On macOS, installs Homebrew if it is missing, then installs packages from the platform manifests in [bootstrap/packages](bootstrap/packages).
 3. Collects personalization data (git name/email and dotfiles path) via
    [bootstrap/personalize.sh](bootstrap/personalize.sh), with environment
    variable overrides.

@@ -75,10 +75,69 @@ require_cmd() {
   command -v "$1" >/dev/null 2>&1 || die "Missing required command: $1"
 }
 
+homebrew_binary() {
+  local brew_bin
+
+  if command -v brew >/dev/null 2>&1; then
+    command -v brew
+    return
+  fi
+
+  for brew_bin in /opt/homebrew/bin/brew /usr/local/bin/brew; do
+    if [[ -x "$brew_bin" ]]; then
+      printf '%s\n' "$brew_bin"
+      return
+    fi
+  done
+
+  return 1
+}
+
+activate_homebrew() {
+  local brew_bin
+
+  brew_bin="$(homebrew_binary)" || return 1
+  eval "$("$brew_bin" shellenv)"
+}
+
+ensure_homebrew() {
+  local os
+  os="$(detect_os)"
+
+  [[ "$os" == "macos" ]] || return 0
+
+  if homebrew_binary >/dev/null 2>&1; then
+    activate_homebrew
+    BOOTSTRAP_PKG_MANAGER_OVERRIDE="brew"
+    return 0
+  fi
+
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    log "[dry-run] NONINTERACTIVE=1 /bin/bash -c \"\$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\""
+    BOOTSTRAP_PKG_MANAGER_OVERRIDE="brew"
+    return 0
+  fi
+
+  require_cmd curl
+  log "Homebrew not found; installing it"
+  NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  activate_homebrew
+  BOOTSTRAP_PKG_MANAGER_OVERRIDE="brew"
+}
+
+resolve_pkg_manager() {
+  if [[ -n "${BOOTSTRAP_PKG_MANAGER_OVERRIDE:-}" ]]; then
+    printf '%s\n' "$BOOTSTRAP_PKG_MANAGER_OVERRIDE"
+    return
+  fi
+
+  detect_pkg_manager
+}
+
 preflight() {
   local os pkg
   os="$(detect_os)"
-  pkg="$(detect_pkg_manager)"
+  pkg="$(resolve_pkg_manager)"
 
   log "Detected OS: $os"
   log "Detected package manager: $pkg"
@@ -180,7 +239,7 @@ install_pacman() {
 
 install_packages() {
   local pkg
-  pkg="$(detect_pkg_manager)"
+  pkg="$(resolve_pkg_manager)"
 
   if [[ "$SKIP_INSTALL" -eq 1 ]]; then
     log "Skipping package installation (--skip-install)"
@@ -337,6 +396,7 @@ run_post_bootstrap_hooks() {
 
 main() {
   parse_args "$@"
+  ensure_homebrew
   preflight
   install_packages
   run_personalization
