@@ -29,10 +29,12 @@ prompt_with_default() {
   local reply
 
   if [[ -n "$default_value" ]]; then
-    read -r "reply?$prompt_text [$default_value]: "
+    printf "%s" "$prompt_text [$default_value]: "
+    read -r reply
     echo "${reply:-$default_value}"
   else
-    read -r "reply?$prompt_text: "
+    printf "%s" "$prompt_text: "
+    read -r reply
     echo "$reply"
   fi
 }
@@ -83,7 +85,7 @@ write_env_file() {
     printf 'export BOOTSTRAP_GIT_NAME=%q\n' "$BOOTSTRAP_GIT_NAME"
     printf 'export BOOTSTRAP_GIT_EMAIL=%q\n' "$BOOTSTRAP_GIT_EMAIL"
     printf 'export BOOTSTRAP_DOTFILES_DIR=%q\n' "$BOOTSTRAP_DOTFILES_DIR"
-  } > "$OUTFILE"
+  } >"$OUTFILE"
 }
 
 main() {
