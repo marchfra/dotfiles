@@ -1,5 +1,14 @@
 # marchfra's dotfiles
 
+<!--toc:start-->
+
+- [marchfra's dotfiles](#marchfras-dotfiles)
+  - [Quick start](#quick-start)
+  - [Useful options](#useful-options)
+  - [Environment overrides](#environment-overrides)
+  - [Notes](#notes) - [Updating pinned submodule commits](#updating-pinned-submodule-commits)
+  <!--toc:end-->
+
 This repository is intended to bootstrap a new machine with one command.
 
 ## Quick start
@@ -13,7 +22,8 @@ cd ~/dotfiles
 The bootstrap script currently does the following:
 
 1. Detects supported platforms: macOS + Homebrew, Linux + apt, Linux + pacman.
-2. On macOS, installs Homebrew if it is missing, then installs packages from the platform manifests in [bootstrap/packages](bootstrap/packages).
+2. On macOS, installs Homebrew if it is missing, then installs packages from
+   the platform manifests in [bootstrap/packages](bootstrap/packages).
 3. Collects personalization data (git name/email and dotfiles path) via
    [bootstrap/personalize.sh](bootstrap/personalize.sh), with environment
    variable overrides.
@@ -47,9 +57,12 @@ BOOTSTRAP_DOTFILES_DIR="/absolute/path/to/dotfiles"
 
 1. Stow is configured to fail safely on conflicts. Resolve conflicts and rerun
    the script.
-2. `oh-my-tmux` is tracked as a proper git submodule at [tmux/.config/tmux/oh-my-tmux](tmux/.config/tmux/oh-my-tmux).
-3. Submodules are pinned to the exact commit recorded in this repository. `bootstrap/setup.sh` checks out those pinned commits.
-4. To update a submodule intentionally, move it to the desired revision and commit the gitlink update in this repository.
+2. `oh-my-tmux` is tracked as a proper git submodule at
+   [tmux/.config/tmux/oh-my-tmux](tmux/.config/tmux/oh-my-tmux).
+3. Submodules are pinned to the exact commit recorded in this repository.
+   `bootstrap/setup.sh` checks out those pinned commits.
+4. To update a submodule intentionally, move it to the desired revision and
+   commit the gitlink update in this repository.
 
 ### Updating pinned submodule commits
 
