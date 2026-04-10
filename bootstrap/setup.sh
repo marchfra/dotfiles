@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+if [[ -z "${BASH_VERSION:-}" ]]; then
+  echo "ERROR: bootstrap/setup.sh must be run with bash." >&2
+  exit 1
+fi
+
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
